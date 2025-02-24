@@ -70,3 +70,51 @@ function animate() {
 }
 
 animate();
+
+// Création de la géométrie des particules
+const particlesGeometry = new THREE.BufferGeometry();
+const particlesCount = 200;
+
+// Tableaux pour stocker les positions des particules
+const positions = new Float32Array(particlesCount * 3);
+
+for (let i = 0; i < particlesCount * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 10; // Distribution des particules autour du centre
+}
+
+// Assigner les positions à la géométrie
+particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+// Matériau des particules (petits points lumineux)
+const particlesMaterial = new THREE.PointsMaterial({
+    color: 0x44aa88,
+    size: 0.05,
+    transparent: true,
+    opacity: 0.8,
+});
+
+// Création du nuage de particules
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+
+// Animation des particules
+function animateParticles() {
+    particles.rotation.y += 0.002;
+    particles.rotation.x += 0.001;
+}
+
+// Mise à jour de l’animation principale
+function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotation de la sphère
+    sphere.rotation.y += 0.01;
+    sphere.rotation.x += 0.005;
+
+    // Animation des particules
+    animateParticles();
+
+    renderer.render(scene, camera);
+}
+
+animate();
